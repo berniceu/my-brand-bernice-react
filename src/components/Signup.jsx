@@ -1,11 +1,13 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
+    const navigate = useNavigate();
     return(
         <>
         <div className="header">
         <header>
-            <a href="blogs.html"><h1>BERNICE</h1></a>
+            <a onClick={() => navigate(-1)}><h1>BERNICE</h1></a>
             <button className="toggle"><img src="images/moon.png" alt="dark mode icon" className="moon"/></button>
         </header>
     </div>

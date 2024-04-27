@@ -4,14 +4,19 @@ import portfolio from '../images/portfolio.png';
 import slack from '../images/slack.jpg';
 import urlShortener from '../images/urlshortener.jpg';
 import weather from '../images/weather.png';
-import { useNavigate } from "react-router-dom";
+import Navbar from "./Navbar";
+import Footer from "./Footer";
+import { Link, useNavigate } from "react-router-dom";
 
 import './index.css';
 
 const Home = () => {
   const navigate = useNavigate();
+
+  
   return (
     <>
+      <Navbar/>
       <main>
         <section id="home">
           <div className="home-container">
@@ -28,7 +33,7 @@ const Home = () => {
                 projects I have worked on, and blogs.
               </p>
 
-              <button className="button" onClick = {() => navigate('/Blogs')}>
+              <button className="button" onClick = {() => navigate('/blogs')}>
                 <a>Read My Blogs</a>
               </button>
               <div className="social-icons">
@@ -238,6 +243,7 @@ const Home = () => {
           </div>
         </section>
       </main>
+      <Footer/>
     </>
   );
 };
