@@ -3,10 +3,13 @@ import profile from '../images/profile.png';
 import portfolio from '../images/portfolio.png';
 import slack from '../images/slack.jpg';
 import urlShortener from '../images/urlshortener.jpg';
-import weather from '../images/weather.png'
+import weather from '../images/weather.png';
+import { useNavigate } from "react-router-dom";
+
 import './index.css';
 
 const Home = () => {
+  const navigate = useNavigate();
   return (
     <>
       <main>
@@ -25,8 +28,8 @@ const Home = () => {
                 projects I have worked on, and blogs.
               </p>
 
-              <button className="button">
-                <a href="blogs.html">Read My Blogs</a>
+              <button className="button" onClick = {() => navigate('/Blogs')}>
+                <a>Read My Blogs</a>
               </button>
               <div className="social-icons">
                 <a

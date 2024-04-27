@@ -1,5 +1,6 @@
 import React from "react";
 import './index.css';
+import moon from '../images/moon.png';
 
 const Navbar = () => {
   return (
@@ -37,7 +38,7 @@ const Navbar = () => {
             </li>
           </ul>
           <button className="toggle">
-            <img src="images/moon.png" alt="dark mode icon" className="moon" />
+            <img src={moon} alt="dark mode icon" className="moon" />
           </button>
         </nav>
       </div>
