@@ -1,4 +1,6 @@
 import React from "react";
+import './adminpanel.css';
+import './index.css';
 
 const Adminpanel = () => {
   return (
@@ -6,7 +8,7 @@ const Adminpanel = () => {
       <div className="loader"></div>
       <div className="admin-container">
         <div className="left-container">
-          <a href="index.html">
+          <a href="">
             <h1>BERNICE</h1>
           </a>
 
@@ -108,3 +110,5 @@ const Adminpanel = () => {
     </>
   );
 };
+
+export default Adminpanel;

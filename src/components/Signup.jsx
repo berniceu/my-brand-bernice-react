@@ -1,5 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import './signup.css';
+import './login.css';
+import moon from '../images/moon.png'
 
 const Signup = () => {
     const navigate = useNavigate();
@@ -7,8 +10,8 @@ const Signup = () => {
         <>
         <div className="header">
         <header>
-            <a onClick={() => navigate(-1)}><h1>BERNICE</h1></a>
-            <button className="toggle"><img src="images/moon.png" alt="dark mode icon" className="moon"/></button>
+            <a href="" onClick={() => navigate(-1)}><h1>BERNICE</h1></a>
+            <button className="toggle"><img src={moon} alt="dark mode icon" className="moon"/></button>
         </header>
     </div>
     <div className="container">
@@ -51,7 +54,7 @@ const Signup = () => {
                 <div className="error-text" id="repeat">Passwords must match</div>
             </div>
 
-            <button type="submit" id="submit-btn">Submit</button>
+            <button type="submit" id="submit-btn" onClick={() => {navigate('/login')}}>Submit</button>
         </form>
         
         
