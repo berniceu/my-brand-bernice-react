@@ -1,7 +1,8 @@
 
 import Home from './components/Home';
 import Signup from './components/Signup';
-import { BlogList } from './components/Blogs';
+import Blogs from './components/Blogs';
+import ReadBlog from './components/ReadBlog';
 
 import './components/index.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
@@ -12,7 +13,8 @@ function App() {
     <Router>
       <Routes>
         <Route path='/' element={<Home/>}/>
-        <Route path='/blogs' element={<BlogList/>}/>
+        <Route path='/blogs' element={<Blogs/>}/>
+        <Route path='/readblog' element={<ReadBlog/>}/>
         <Route path='/signup' element={<Signup/>}/>
       </Routes>
     </Router>
