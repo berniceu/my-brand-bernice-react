@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import profile from '../images/profile.png';
 import portfolio from '../images/portfolio.png';
 import slack from '../images/slack.jpg';
@@ -9,6 +9,90 @@ import Footer from "./Footer";
 import { Link, useNavigate } from "react-router-dom";
 
 import './index.css';
+
+const Query = () => {
+  const [query, setQuery] = useState([]);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  
+
+  const handleQuery = async (e) => {
+    e.preventDefault();
+    const queryData = {
+      name: e.target.element.username.value,
+      email: e.target.element.email.value,
+      query: e.target.element.query.value
+    }
+    
+    setLoading(true);
+    try{
+      const res = await fetch('https://my-brand-api-x8z4.onrender.com/queries/sendquery', {
+        method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify(queryData)
+      });
+
+      if(res.ok){
+        alert('message sent successfully');
+      }
+
+    } catch(err){
+      setError(err.message)
+    } finally{
+      setLoading(false);
+    }
+  }
+
+  return(<>
+    <form onSubmit={handleQuery} className="contact-form">
+              <div className="input-field">
+                <input
+                  type="text"
+                  id="username"
+                  placeholder="Name"
+                  name="username"
+                  autocomplete="name"
+                  className="item"
+                />
+                <div className="error-text">Name can't be blank</div>
+              </div>
+
+              <div className="input-field">
+                <input
+                  type="email"
+                  placeholder="Email Address"
+                  name="email"
+                  id="useremail"
+                  autocomplete="email"
+                  className="item"
+                />
+                <div className="email error-text">
+                  Email Address can't be blank
+                </div>
+              </div>
+
+              <div className="input-field">
+                <textarea
+                  name="query"
+                  id="query"
+                  cols="30"
+                  rows="10"
+                  placeholder="Enter Your Query..."
+                  autocomplete="off"
+                  className="item"
+                ></textarea>
+                <div className="error-text">Message can't be blank</div>
+              </div>
+
+              <div className="contact-button">
+                <button type="submit" className="button">
+                  Send
+                </button>
+              </div>
+            </form>
+  </>)
+}
 
 const Home = () => {
   const navigate = useNavigate();
@@ -104,7 +188,7 @@ const Home = () => {
           <div className="projects">
             <div className="project-container">
               <div className="img-container">
-                <img src={urlShortener} alt="projecte" />
+                <img src={urlShortener} alt="project" />
               </div>
               <h3 className="project-title"> URL Shortener</h3>
 
@@ -193,53 +277,8 @@ const Home = () => {
           <div className="contact-section">
             <h1 className="title first">Get In Touch</h1>
             <h1 className="title">With Me</h1>
-
-            <form method="post" className="contact-form">
-              <div className="input-field">
-                <input
-                  type="text"
-                  id="username"
-                  placeholder="Name"
-                  name="username"
-                  autocomplete="name"
-                  className="item"
-                />
-                <div className="error-text">Name can't be blank</div>
-              </div>
-
-              <div className="input-field">
-                <input
-                  type="email"
-                  placeholder="Email Address"
-                  name="useremail"
-                  id="useremail"
-                  autocomplete="email"
-                  className="item"
-                />
-                <div className="email error-text">
-                  Email Address can't be blank
-                </div>
-              </div>
-
-              <div className="input-field">
-                <textarea
-                  name="query"
-                  id="query"
-                  cols="30"
-                  rows="10"
-                  placeholder="Enter Your Query..."
-                  autocomplete="off"
-                  className="item"
-                ></textarea>
-                <div className="error-text">Message can't be blank</div>
-              </div>
-
-              <div className="contact-button">
-                <button type="submit" className="button">
-                  Send
-                </button>
-              </div>
-            </form>
+            <Query/>
+            
           </div>
         </section>
       </main>

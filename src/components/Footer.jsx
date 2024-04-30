@@ -50,7 +50,7 @@ const Subscribe = () => {
             name="subscribeEmail"
             placeholder="Email"
           />
-          <button type="submit" id="subscribe-btn" onClick={<Subscribe />}>
+          <button type="submit" id="subscribe-btn">
             Subscribe
           </button>
         </form>
