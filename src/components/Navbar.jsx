@@ -1,6 +1,7 @@
 import React from "react";
 import './index.css';
 import moon from '../images/moon.png';
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
@@ -32,9 +33,9 @@ const Navbar = () => {
               </a>
             </li>
             <li>
-              <a href="login.html" className="button">
+              <Link to={'/login'} className="button" >
                 Log In
-              </a>
+              </Link>
             </li>
           </ul>
           <button className="toggle">

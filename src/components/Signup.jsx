@@ -1,8 +1,35 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import './signup.css';
 import './login.css';
 import moon from '../images/moon.png'
+
+
+const FetchSignup = () => {
+    const [signup, setSignup] = useState([])
+    const [error, setError] = useState(null)
+    const [isLoading, setIsLoading] = useState(false)
+
+    useEffect(() => {
+        try{
+            const postSignup = async() => {
+            const res = await fetch('https://my-brand-api-x8z4.onrender.com/users/signup', {
+                method: 'POST',
+                
+            })
+
+                if(!res.ok){
+                    alert('Server error')
+                }
+                const data = await res.json();
+
+            }
+        } catch(err){
+            console.log(err)
+        }
+        
+    })
+}
 
 const Signup = () => {
     const navigate = useNavigate();
