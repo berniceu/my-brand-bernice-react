@@ -1,85 +1,230 @@
-import React, {useState, useEffect} from "react";
-import './index.css';
-import './adminpanel.css';
-import moon from '../images/moon.png';
-import profile from '../images/profile.png'
+import React, { useState, useEffect } from "react";
+import "./index.css";
+
+import moon from "../images/moon.png";
+import profile from "../images/profile.png";
 
 import { Link } from "react-router-dom";
 
-export const FetchQueries = () => {
+const PostBlogs = () => {
+  const [blogs, setBlogs] = useState([]);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleBlogs = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    const form = e.target;
+
+    formData.append("blogTitle", form.title.value);
+    formData.append("blog", form.story.value);
+    formData.append("author", form.author.value);
+    formData.append("blogImage", form.image.files[0]);
+
+    setLoading(true);
+    try {
+      const res = await fetch(
+        "https://my-brand-api-x8z4.onrender.com/blogs/createBlog",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      if (res.ok) {
+        alert("Blog created successfully");
+        window.location.reload();
+      } else {
+        alert("Failed to create blog");
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <>
+      <form onSubmit={handleBlogs} className="new-story-form">
+        <input type="file" name="image" id="blog-image" accept="image/*" />
+        <br />
+
+        <input type="text" name="title" id="title" placeholder="Title" />
+        <br />
+        <input type="text" name="author" id="author" placeholder="Author" />
+        <textarea
+          name="story"
+          id="story"
+          rows="10"
+          placeholder="Tell Your Story..."
+        ></textarea>
+        <button className="button" id="publish">
+          {loading ? "Publishing..." : "Publish"}
+        </button>
+      </form>
+    </>
+  );
+};
+
+const UpdateBlog = ({blog}) => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const formData = new FormData();
+    const form = e.target;
+    formData.append("blogTitle", form.title.value);
+    formData.append("blog", form.story.value);
+    formData.append("author", form.author.value);
+    formData.append("blogImage", form.image.files[0]);
+    
+    try {
+      const res = await fetch(
+        `https://my-brand-api-x8z4.onrender.com/blogs/updateBlog/${blog._id}`,
+        {
+          method: "PUT",
+          body: formData,
+        }
+      );
+
+      if (res.ok) {
+        alert("Blog updated successfully");
+      } else {
+        alert("Failed to update blog");
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <>
+      <form onSubmit={handleUpdate} className="new-story-form">
+        <input
+          type="file"
+          name="image"
+          id="blog-image"
+          accept="image/*"
+          defaultValue={blog.blogImage}
+        />
+        <br />
+
+        <input
+          type="text"
+          name="title"
+          id="title"
+          placeholder="Title"
+          defaultValue={blog.blogTitle}
+        />
+        <br />
+        <input
+          type="text"
+          name="author"
+          id="author"
+          placeholder="Author"
+          defaultValue={blog.author}
+        />
+        <textarea
+          name="story"
+          id="story"
+          rows="10"
+          placeholder="Tell Your Story..."
+          defaultValue={blog.blog}
+        ></textarea>
+        <button className="button" id="publish">
+          {loading ? "Updating..." : "Update"}
+        </button>
+      </form>
+    </>
+  );
+};
+
+const FetchQueries = () => {
   const [queries, setQueries] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchQueries = async() => {
+    const fetchQueries = async () => {
       setLoading(true);
-      try{
-        const res = await fetch(`https://my-brand-api-x8z4.onrender.com/blogs/getAllBlogs`);
-        if(!res.ok){
-          throw new Error(`HTTP status: ${res.status}`)
+      try {
+        const res = await fetch(
+          `https://my-brand-api-x8z4.onrender.com/blogs/getAllBlogs`
+        );
+        if (!res.ok) {
+          throw new Error(`HTTP status: ${res.status}`);
         }
         const queryData = await res.json();
         console.log(queryData);
         setQueries(queryData);
-      }
-      catch(err){
+      } catch (err) {
         setError(err.message);
-        setQueries([])
-      }
-      finally{
+        setQueries([]);
+      } finally {
         setLoading(false);
-        
       }
     };
     fetchQueries();
   }, []);
 
-  return (<>
-  {loading && (<div className="loader" style={{display: 'flex'}}> </div>)}
-  {error && <div className="error">{error}</div>}
-  {queries.length === 0 ? (
-  <div>No queries found</div>
-) : (
-  queries.map((query) => (
-    <div className="queries" key={query._id}>
-      <div className="user">
-        <h3>{query.name}</h3>
-        <h4>{query.email}</h4>
-      </div>
-      <p>{query.query}</p>
-      <button className="button">View More</button>
-    </div>
-  ))
-)}
+  return (
+    <>
+      {loading && (
+        <div className="loader" style={{ display: "flex" }}>
+          {" "}
+        </div>
+      )}
+      {error && <div className="error">{error}</div>}
+      {queries.length === 0 ? (
+        <div>No queries found</div>
+      ) : (
+        queries.map((query) => (
+          <div className="queries" key={query._id}>
+            <div className="user">
+              <h3>{query.name}</h3>
+              <h4>{query.email}</h4>
+            </div>
+            <p>{query.query}</p>
+            <button className="button">View More</button>
+          </div>
+        ))
+      )}
+    </>
+  );
+};
 
-  </>)
-}
-
-export const FetchBlogs = () => {
+const FetchBlogs = () => {
   const [blogs, setBlogs] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [editingBlog, setEditingBlog] = useState(null);
 
   useEffect(() => {
     const fetchBlogs = async () => {
       setLoading(true);
-      try{
-        const res = await fetch(`https://my-brand-api-x8z4.onrender.com/blogs/getAllBlogs`);
-        if(!res.ok){
-          throw new Error(`HTTP Error: ${res.status}`)
+      try {
+        const res = await fetch(
+          `https://my-brand-api-x8z4.onrender.com/blogs/getAllBlogs`
+        );
+        if (!res.ok) {
+          throw new Error(`HTTP Error: ${res.status}`);
         }
 
         let blogsData = await res.json();
-        
+
         setBlogs(blogsData);
         setError(null);
-      }
-      catch(err){
+      } catch (err) {
         setError(err.message);
         setBlogs([]);
-      }
-      finally{
+      } finally {
         setLoading(false);
       }
     };
@@ -87,47 +232,117 @@ export const FetchBlogs = () => {
     fetchBlogs();
   }, []);
 
+  const handleEditBlog = async(blogId) => {
+    try{
+      const res = await fetch(`https://my-brand-api-x8z4.onrender.com/blogs/getBlog/${blogId}`);
+    if (res.ok) {
+      const blogData = await res.json();
+      setEditingBlog(blogData);
+    } else{
+      setError('failed to fetch blog');
+    } 
+  } catch(err){
+    setError(err.message)
+  } finally{
+    setLoading(false);
+  }
+};
+
+  const handleDeleteBlog = async (blogId) => {
+    try {
+      const res = await fetch(
+        `https://my-brand-api-x8z4.onrender.com/blogs/deleteBlog/${blogId}`,
+        { method: "DELETE", headers: { "Content-Type": "application/json" } }
+      );
+
+      if (res.ok) {
+        setBlogs((prevBlogs) =>
+          prevBlogs.filter((blog) => blog._id !== blogId)
+        );
+        window.location.reload();
+        alert("deleted successfully");
+      } else {
+        alert("delete failed");
+      }
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
   return (
     <>
-      {loading && (<div className="loader" style={{display: 'flex'}}> </div>)}
+      {loading && (
+        <div className="loader" style={{ display: "flex" }}>
+          {" "}
+        </div>
+      )}
       {error && <div className="error">{error}</div>}
       {blogs.length === 0 ? (
-  <div>No blogs found</div>
-) : (
-  blogs.map((blog) => (
-    <div className="blogs" key={blog._id}>
-      <div className="blog-title">
-        <h3>
-          <Link to={`/readblog?id=${blog._id}`} className="blog-link">
-            {blog.blogTitle}
-          </Link>
-        </h3>
-      </div>
-      <p>{blog.author}</p>
-      <i className="fa-solid fa-heart" id="heart"></i>
-      <span>0 Likes</span>
-      <i className="fa-solid fa-comment"></i>
-      <span>0 Comments</span>
-      <i className="fa-solid fa-pen edit-button"></i>
-      <span>Edit</span>
-      <i className="fa-solid fa-trash delete-button"></i>
-      <span>Delete</span>
-    </div>
-  ))
-)}
-      
+        <div>No blogs found</div>
+      ) : (
+        blogs.map((blog) => (
+          <div className="blogs" key={blog._id}>
+            <div className="blog-title">
+              <h3>
+                <Link to={`/readblog?id=${blog._id}`} className="blog-link">
+                  {blog.blogTitle}
+                </Link>
+              </h3>
+            </div>
+            <p>{blog.author}</p>
+            <i className="fa-solid fa-heart" id="heart"></i>
+            <span>0 Likes</span>
+            <i className="fa-solid fa-comment"></i>
+            <span>0 Comments</span>
+            <i
+              className="fa-solid fa-pen edit-button"
+              
+            ></i>
+            <span onClick={() => handleEditBlog(blog._id)}>Edit</span>
+            <i
+              className="fa-solid fa-trash delete-button"
+              
+            ></i>
+            <span onClick={() => handleDeleteBlog(blog._id)}>Delete</span>
+          </div>
+        ))
+      )}
     </>
-  )
-}
+  );
+};
 
+
+const NewPost = () => {
+  const [newPost, setNewPost] = useState(false);
+
+  const toggleNewPost = () => {
+    setNewPost((prevState) => !prevState);
+  };
+
+  return (
+    <>
+      <button className="button" id="new-post-button" onClick={toggleNewPost}>
+        <a href="#title">Write New Post</a>
+      </button>
+      {newPost && (
+        <div className="create-article">
+          <div className="create-article-container">
+            <div className="blog-form">
+              <PostBlogs />
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
 
 const Adminpanel = () => {
   return (
     <>
-      
       <div className="admin-container">
         <div className="left-container">
-          <Link to={'/login'}>
+          <Link to={"/login"}>
             <h1>BERNICE</h1>
           </Link>
 
@@ -156,11 +371,7 @@ const Adminpanel = () => {
           </div>
           <div className="top">
             <button className="toggle">
-              <img
-                src={moon}
-                alt="dark mode icon"
-                className="moon"
-              />
+              <img src={moon} alt="dark mode icon" className="moon" />
             </button>
           </div>
 
@@ -176,58 +387,15 @@ const Adminpanel = () => {
 
           <h2>Recent Queries</h2>
           <div className="queries-div">
-            <FetchQueries/>
+            <FetchQueries />
           </div>
 
           <h2>Recent Blogs</h2>
           <div className="blogs-container">
             <div className="new-article-container">
-              <FetchBlogs/>
-              
+              <FetchBlogs />
             </div>
-
-            <button className="button" id="new-post-button">
-              <a href="#title">Write New Post</a>
-            </button>
-
-            <div className="create-article hidden">
-              <div className="create-article-container">
-                <div className="blog-form">
-                  <form action="" className="new-story-form">
-                    <input
-                      type="file"
-                      name="image"
-                      id="blog-image"
-                      accept="image/*"
-                    />
-                    <br />
-
-                    <input
-                      type="text"
-                      name="title"
-                      id="title"
-                      placeholder="Title"
-                    />
-                    <br />
-                    <input
-                      type="text"
-                      name="author"
-                      id="author"
-                      placeholder="Author"
-                    />
-                    <textarea
-                      name="story"
-                      id="story"
-                      rows="10"
-                      placeholder="Tell Your Story..."
-                    ></textarea>
-                    <button className="button" id="publish">
-                      Publish
-                    </button>
-                  </form>
-                </div>
-              </div>
-            </div>
+            <NewPost />
           </div>
         </div>
       </div>
