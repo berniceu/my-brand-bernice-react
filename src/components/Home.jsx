@@ -19,18 +19,20 @@ const Query = () => {
 
   const handleQuery = async (e) => {
     e.preventDefault();
+
+    const form = e.target;
     const queryData = {
-      name: e.target.element.username.value,
-      email: e.target.element.email.value,
-      query: e.target.element.query.value
+      name: form.username.value,
+      email: form.email.value,
+      query: form.query.value
     }
     
     setLoading(true);
     try{
       const res = await fetch('https://my-brand-api-x8z4.onrender.com/queries/sendquery', {
         method: "POST",
-                    headers: {"Content-Type": "application/json"},
-                    body: JSON.stringify(queryData)
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(queryData)
       });
 
       if(res.ok){
@@ -86,8 +88,8 @@ const Query = () => {
               </div>
 
               <div className="contact-button">
-                <button type="submit" className="button">
-                  Send
+                <button type="submit" className="button" disabled={loading}>
+                  {loading ? 'Sending...' : 'Send'}
                 </button>
               </div>
             </form>

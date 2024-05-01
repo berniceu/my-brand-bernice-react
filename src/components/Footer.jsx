@@ -35,6 +35,7 @@ const Subscribe = () => {
       setError(err.message);
     } finally {
       setLoading(false);
+      
     }
   };
 
