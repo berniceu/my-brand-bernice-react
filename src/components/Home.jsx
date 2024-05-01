@@ -27,7 +27,7 @@ const Query = () => {
       query: form.query.value
     }
     
-    setLoading(true);
+   
     try{
       const res = await fetch('https://my-brand-api-x8z4.onrender.com/queries/sendquery', {
         method: "POST",
