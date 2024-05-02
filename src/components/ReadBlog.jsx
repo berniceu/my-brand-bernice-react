@@ -5,9 +5,10 @@ import DOMPurify from "dompurify";
 
 const Blog = ({ blog }) => {
   const formattedBlog = blog?.blog
-    ? DOMPurify.sanitize(blog.blog.replace(/\n/g, "<br>")
-    .replace(/===(.*)===/g, "<h4>$1</h4>")) 
-    : "No content available"
+    ? DOMPurify.sanitize(
+        blog.blog.replace(/\n/g, "<br>").replace(/===(.*)===/g, "<h4>$1</h4>")
+      )
+    : "No content available";
 
   return (
     <>
@@ -21,6 +22,79 @@ const Blog = ({ blog }) => {
       </div>
     </>
   );
+};
+
+const PostComment = ({ blog }) => {
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [comment, setComment] = useState([]);
+
+  const blogId = blog._id;
+
+  const handleComment = async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const name = form.name.value.trim();
+    const comment = form.comment.value.trim();
+
+    if( !name || !comment){
+      setError('Name and comment cannot be empty');
+      return;
+    }
+
+    const commentData = {
+      name,
+      comment
+    }
+
+    setLoading(true)
+    try {
+      const res = await fetch(
+        `https://my-brand-api-x8z4.onrender.com/blogs/addComment/${blogId}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(commentData),
+        }
+      );
+
+      if(res.ok){
+        form.reset();
+        setComment('');
+      } else{
+        setError('failed to comment');
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally{
+      setLoading(false)
+    }
+  };
+
+  return(<>
+  <form onSubmit={handleComment} className="comment-form">
+            <input
+              type="text"
+              name="name"
+              placeholder="Name"
+              className="commenter-name item"
+              autocomplete="name"
+            />
+            <textarea
+              name="comment"
+              className="comment-text item"
+              cols="80"
+              rows="10"
+              placeholder="Enter your comment..."
+            ></textarea>
+
+            <button type="submit" className="button">
+              {loading ? "Commenting..." : "Comment"}
+            </button>
+          </form>
+  </>)
+
+
 };
 
 const RenderBlog = () => {
@@ -70,6 +144,9 @@ function ReadBlog() {
 
   return (
     <>
+      <div className="blogs">
+
+      
       <div className="header">
         <header>
           <a
@@ -95,30 +172,12 @@ function ReadBlog() {
           <span className="comment-span">0 Comments</span>
         </div>
 
-        <div className="comment-section hidden">
+        <div className="comment-section">
           <h4>Leave A Comment</h4>
           <div className="new-comment"></div>
-          <form action="" className="comment-form">
-            <input
-              type="text"
-              name="name"
-              placeholder="Name"
-              className="commenter-name item"
-              autocomplete="name"
-            />
-            <textarea
-              name="textarea"
-              className="comment-text item"
-              cols="80"
-              rows="10"
-              placeholder="Enter your comment..."
-            ></textarea>
-
-            <button type="submit" className="button">
-              Comment
-            </button>
-          </form>
+            <PostComment/>
         </div>
+      </div>
       </div>
     </>
   );

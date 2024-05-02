@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Footer from "./Footer";
-import "./blogs.css";
 import moon from "../images/moon.png";
 
 const BlogItem = ({ blog }) => {
@@ -77,6 +76,7 @@ const Blogs = () => {
   const navigate = useNavigate();
   return (
     <>
+    <div className="blogs">
       <main>
         <div className="welcome">
           <h1>Welcome To My Blog</h1>
@@ -101,6 +101,7 @@ const Blogs = () => {
         </div>
       </main>
       <Footer />
+      </div>
     </>
   );
 };

@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import './login.css';
-import './signup.css';
 import moon from '../images/moon.png';
 import { useNavigate } from "react-router-dom";
 
@@ -75,6 +73,7 @@ const Login = () => {
     const navigate = useNavigate();
 
     return(<>
+    <div className="login">
     <div className="header">
         <header>
             <a href="index.html"><h1>BERNICE</h1></a>
@@ -88,6 +87,7 @@ const Login = () => {
         <LoginPost/>
         
         
+    </div>
     </div>
     
     </>)

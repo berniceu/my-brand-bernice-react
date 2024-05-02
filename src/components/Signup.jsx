@@ -1,7 +1,5 @@
 import React, {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
-import './signup.css';
-import './login.css';
 import moon from '../images/moon.png'
 
 
@@ -100,6 +98,7 @@ const Signup = () => {
     const navigate  = useNavigate();
     return(
         <>
+        <div className="signup">
         <div className="header">
         <header>
             <a href="" onClick={() => navigate(-1)}><h1>BERNICE</h1></a>
@@ -114,6 +113,7 @@ const Signup = () => {
         
         <SignupPost/>
         
+    </div>
     </div>
         </>
     )

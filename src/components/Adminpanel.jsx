@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
-import "./index.css";
-
 import moon from "../images/moon.png";
 import profile from "../images/profile.png";
-
 import { Link } from "react-router-dom";
 
 const PostBlogs = () => {
@@ -112,7 +109,7 @@ const UpdateBlog = ({blog}) => {
           name="image"
           id="blog-image"
           accept="image/*"
-          defaultValue={blog.blogImage}
+          
         />
         <br />
 
@@ -277,6 +274,9 @@ const FetchBlogs = () => {
         </div>
       )}
       {error && <div className="error">{error}</div>}
+      {editingBlog && <UpdateBlog blog={editingBlog}/>}
+      {!editingBlog && (
+      <div>
       {blogs.length === 0 ? (
         <div>No blogs found</div>
       ) : (
@@ -307,6 +307,8 @@ const FetchBlogs = () => {
           </div>
         ))
       )}
+      </div>
+    )}
     </>
   );
 };
@@ -340,6 +342,7 @@ const NewPost = () => {
 const Adminpanel = () => {
   return (
     <>
+      <div className="adminpanel">
       <div className="admin-container">
         <div className="left-container">
           <Link to={"/login"}>
@@ -398,6 +401,7 @@ const Adminpanel = () => {
             <NewPost />
           </div>
         </div>
+      </div>
       </div>
     </>
   );

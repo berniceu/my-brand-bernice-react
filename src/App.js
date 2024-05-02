@@ -6,7 +6,7 @@ import ReadBlog from './components/ReadBlog';
 import Login from './components/Login';
 import Adminpanel from './components/Adminpanel';
 
-import './components/index.css';
+
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 

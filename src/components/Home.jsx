@@ -8,7 +8,7 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 import { Link, useNavigate } from "react-router-dom";
 
-import './index.css';
+import './main.scss';
 
 const Query = () => {
   const [query, setQuery] = useState([]);
