@@ -25,7 +25,7 @@ const BlogItem = ({ blog }) => {
         <button className="blog-button">
           <a onClick={() => {navigate('/readblog')}}>Read Article</a>
         </button>
-        `
+        
       </div>
     </>
   );
