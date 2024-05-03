@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import moon from "../images/moon.png";
+
 import profile from "../images/profile.png";
 import { Link } from "react-router-dom";
 
@@ -400,7 +400,7 @@ const Adminpanel = () => {
           </div>
           <div className="top">
             <button className="toggle">
-              <img src={moon} alt="dark mode icon" className="moon" />
+
             </button>
           </div>
 

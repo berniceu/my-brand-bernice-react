@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
-import moon from '../images/moon.png'
+
 
 
 
@@ -102,7 +102,7 @@ const Signup = () => {
         <div className="header">
         <header>
             <a href="" onClick={() => navigate(-1)}><h1>BERNICE</h1></a>
-            <button className="toggle"><img src={moon} alt="dark mode icon" className="moon"/></button>
+
         </header>
     </div>
     <div className="container">

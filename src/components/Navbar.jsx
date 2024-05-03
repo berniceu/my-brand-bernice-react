@@ -1,6 +1,6 @@
 import React from "react";
 import './index.css';
-import moon from '../images/moon.png';
+
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
@@ -39,7 +39,7 @@ const Navbar = () => {
             </li>
           </ul>
           <button className="toggle">
-            <img src={moon} alt="dark mode icon" className="moon" />
+      
           </button>
         </nav>
       </div>

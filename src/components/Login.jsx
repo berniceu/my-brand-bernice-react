@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import moon from '../images/moon.png';
+
 import { useNavigate } from "react-router-dom";
 
 const LoginPost = () => {
@@ -83,7 +83,7 @@ const Login = () => {
     <div className="header">
         <header>
             <a onClick={() => navigate(-1)}><h1>BERNICE</h1></a>
-            <button className="toggle"><img src={moon} alt="dark mode icon" className="moon"/></button>
+     
         </header>
     </div>
     <div className="login-container">

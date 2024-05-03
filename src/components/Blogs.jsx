@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Footer from "./Footer";
-import moon from "../images/moon.png";
+
 
 const BlogItem = ({ blog }) => {
   const navigate = useNavigate();
@@ -81,7 +81,7 @@ const Blogs = () => {
         <div className="welcome">
           <h1>Welcome To My Blog</h1>
           <button className="toggle">
-            <img src={moon} alt="dark mode icon" className="moon" />
+
           </button>
         </div>
 
