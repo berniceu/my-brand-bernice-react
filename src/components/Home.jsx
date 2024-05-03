@@ -8,6 +8,8 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 import { Link, useNavigate } from "react-router-dom";
 
+
+
 import './main.scss';
 
 const Query = () => {
@@ -37,6 +39,7 @@ const Query = () => {
 
       if(res.ok){
         alert('message sent successfully');
+        form.reset();
       }
 
     } catch(err){
@@ -127,10 +130,10 @@ const Home = () => {
                   href="https://linkedin.com/in/bernice-uwituze"
                   
                 >
-                  <i className="fa-brands fa-linkedin fa-2x"></i>
+                  
                 </a>
                 <a href="https://github.com/berniceu">
-                  <i className="fa-brands fa-github fa-2x"></i>
+                
                 </a>
               </div>
             </div>

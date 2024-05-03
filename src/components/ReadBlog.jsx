@@ -24,78 +24,7 @@ const Blog = ({ blog }) => {
   );
 };
 
-const PostComment = ({ blog }) => {
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [comment, setComment] = useState([]);
 
-  const blogId = blog._id;
-
-  const handleComment = async (e) => {
-    e.preventDefault();
-    const form = e.target;
-    const name = form.name.value.trim();
-    const comment = form.comment.value.trim();
-
-    if( !name || !comment){
-      setError('Name and comment cannot be empty');
-      return;
-    }
-
-    const commentData = {
-      name,
-      comment
-    }
-
-    setLoading(true)
-    try {
-      const res = await fetch(
-        `https://my-brand-api-x8z4.onrender.com/blogs/addComment/${blogId}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(commentData),
-        }
-      );
-
-      if(res.ok){
-        form.reset();
-        setComment('');
-      } else{
-        setError('failed to comment');
-      }
-    } catch (err) {
-      setError(err.message);
-    } finally{
-      setLoading(false)
-    }
-  };
-
-  return(<>
-  <form onSubmit={handleComment} className="comment-form">
-            <input
-              type="text"
-              name="name"
-              placeholder="Name"
-              className="commenter-name item"
-              autocomplete="name"
-            />
-            <textarea
-              name="comment"
-              className="comment-text item"
-              cols="80"
-              rows="10"
-              placeholder="Enter your comment..."
-            ></textarea>
-
-            <button type="submit" className="button">
-              {loading ? "Commenting..." : "Comment"}
-            </button>
-          </form>
-  </>)
-
-
-};
 
 const RenderBlog = () => {
   const [blog, setBlog] = useState([]);
@@ -139,7 +68,124 @@ const RenderBlog = () => {
   return <Blog blog={blog} />;
 };
 
-function ReadBlog() {
+
+const CommentSection = ({ blog }) => {
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [comment, setComment] = useState('');
+  const [comments, setComments] = useState([])
+  const [newComment, setNewComment] = useState(false);
+  
+
+  const blogId = blog._id;
+  const toggleNewComment = () => {
+    setNewComment((prevState) => !prevState)
+   }
+
+   useEffect(() => {
+    const getComments = async() => {
+      try{
+        const res = await fetch(`https://my-brand-api-x8z4.onrender.com/blogs/getComment/${blogId}`);
+
+        if(res.ok){
+          const comments = await res.json();
+          setComments(comments);
+        }
+      } catch(err){
+        setError(err.message)
+      } 
+    };
+
+    getComments();
+   }, [blogId])
+
+  const handleComment = async(e) => {
+    e.preventDefault();
+
+    const form = e.target;
+
+    const commentData = {
+      name: form.name.value.trim(),
+      comment: form.comment.value.trim()
+    }
+
+    setLoading(true);
+
+    try{
+      const res = await fetch(`https://my-brand-api-x8z4.onrender.com/blogs/addComment/${blogId}`,{
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(commentData)
+      });
+
+      if(res.ok){
+        form.reset();
+        setComment('');
+        alert('Comment posted successfully');
+        const newComment = await res.json();
+        setComments([...comments, newComment]);
+
+      } else{
+        setError('Failed to post comment');
+      }
+    }catch(err){
+      setError(err.message);
+    } finally{
+      setLoading(false);
+    }
+  }
+
+  const deleteComment = async(commentId) => {
+    try {
+      const res = await fetch(`https://my-brand-api-x8z4.onrender.com/blogs/deleteComment/${commentId}`,{
+        method: 'DELETE',
+      })
+
+      if(res.ok){
+        setComments(comments.filter((comment) => comment._id !== commentId));
+        alert("Comment deleted successfully");
+
+      } else{
+        setError('Failed to delete comment')
+      }
+    } catch(err){
+      setError(err.message);
+    }
+  }
+
+  return(<>
+    <div className="likes-comments">
+          <i className="fa-solid fa-heart"></i>
+          <span className="likes-number">0 Likes</span>
+          <i className="fa-solid fa-comment"></i>
+          <span className="comment-span" onClick={toggleNewComment}>{comments.length} Comments</span>
+        </div>
+
+        {newComment && (<div className="comment-section">
+          <h4>Leave A Comment</h4>
+          <div className="new-comment"></div>
+          <form onSubmit={handleComment} className="comment-form">
+          <input type="text" name="name" placeholder="Name" className="commenter-name item" autocomplete="name"/>
+            <textarea name="textarea" className="comment-text item" cols="80" rows="10" placeholder="Enter your comment..."></textarea>
+
+            <button type="submit" className="button" disabled={loading}>{loading ? 'Posting' : 'Comment'}</button>
+          </form>
+            
+        </div>)}
+
+        {comments.map((comment, index) => (
+          <div className="comment-div" key={index}>
+            <h5>{comment.name}</h5>
+            <p>{comment.comment}</p>
+            <button className="button" onClick={() => deleteComment(comment._id)}>Delete</button>
+          </div>
+        ))}
+  </>)
+}
+
+
+
+const ReadBlog = () => {
   const navigate = useNavigate();
 
   return (
@@ -164,19 +210,9 @@ function ReadBlog() {
         <div className="column">
           <RenderBlog />
         </div>
+            <CommentSection/>
 
-        <div className="likes-comments">
-          <i className="fa-solid fa-heart"></i>
-          <span className="likes-number">0 Likes</span>
-          <i className="fa-solid fa-comment"></i>
-          <span className="comment-span">0 Comments</span>
-        </div>
-
-        <div className="comment-section">
-          <h4>Leave A Comment</h4>
-          <div className="new-comment"></div>
-            <PostComment/>
-        </div>
+        
       </div>
       </div>
     </>

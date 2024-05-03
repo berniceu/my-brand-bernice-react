@@ -9,8 +9,8 @@ const Subscribe = () => {
 
   const handleSubscribe = async (e) => {
     e.preventDefault();
-    const subEmail = e.target.elements.subscribeEmail.value;
-    if (subEmail.value == "") {
+    let subEmail = e.target.elements.subscribeEmail.value;
+    if (subEmail== "") {
       alert("Please fill out your email");
       return;
     } else if (!emailValid.test(subEmail)) {
@@ -29,8 +29,10 @@ const Subscribe = () => {
         }
       );
 
-      const subscribeData = res.json();
+      const subscribeData = await res.json();
       alert("Thank you for subscribing to my blog");
+      window.location.reload();
+      
     } catch (err) {
       setError(err.message);
     } finally {
@@ -82,6 +84,7 @@ const Footer = () => {
               </li>
             </ul>
           </div>
+            <div className="box">
             <Subscribe/>
             
 
@@ -108,6 +111,8 @@ const Footer = () => {
               </div>
             </div>
           </div>
+            </div>
+            
         
 
         <p>© Bernice 2024</p>
