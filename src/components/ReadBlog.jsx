@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import DOMPurify from "dompurify";
 
 const Blog = ({ blog }) => {
@@ -18,7 +17,7 @@ const Blog = ({ blog }) => {
         <img src={blog.blogImage} alt="blog" className="readblog-img" />
       </div>
       <div className="paragraph">
-        <p>{formattedBlog}</p>
+      <div dangerouslySetInnerHTML={{ __html: formattedBlog }} />
       </div>
     </>
   );
@@ -45,7 +44,7 @@ const RenderBlog = () => {
         const res = await fetch(baseUrl);
 
         if (!res.ok) {
-          alert("Server error");
+          setError('Could not get blog')
         }
 
         const data = await res.json();
@@ -77,7 +76,7 @@ const CommentSection = ({ blog }) => {
   const [newComment, setNewComment] = useState(false);
   
 
-  const blogId = blog._id;
+  const blogId = blog && blog._id ? blog._id : null;
   const toggleNewComment = () => {
     setNewComment((prevState) => !prevState)
    }
@@ -88,8 +87,10 @@ const CommentSection = ({ blog }) => {
         const res = await fetch(`https://my-brand-api-x8z4.onrender.com/blogs/getComment/${blogId}`);
 
         if(res.ok){
-          const comments = await res.json();
-          setComments(comments);
+          const data = await res.json();
+          setComments(data);
+        } else{
+          setError("Failed to load comments");
         }
       } catch(err){
         setError(err.message)
@@ -104,9 +105,18 @@ const CommentSection = ({ blog }) => {
 
     const form = e.target;
 
+
     const commentData = {
-      name: form.name.value.trim(),
-      comment: form.comment.value.trim()
+      name: form.value,
+      comment: form.value
+    }
+
+    
+
+    if(!commentData.name || !commentData.comment){
+      setError('Both name and comment are required');
+      return;
+
     }
 
     setLoading(true);
@@ -120,7 +130,6 @@ const CommentSection = ({ blog }) => {
 
       if(res.ok){
         form.reset();
-        setComment('');
         alert('Comment posted successfully');
         const newComment = await res.json();
         setComments([...comments, newComment]);
@@ -158,7 +167,7 @@ const CommentSection = ({ blog }) => {
           <i className="fa-solid fa-heart"></i>
           <span className="likes-number">0 Likes</span>
           <i className="fa-solid fa-comment"></i>
-          <span className="comment-span" onClick={toggleNewComment}>{comments.length} Comments</span>
+          <span className="comment-span" style={{cursor: "pointer"}} onClick={toggleNewComment}>{comments.length} Comments</span>
         </div>
 
         {newComment && (<div className="comment-section">
@@ -166,7 +175,7 @@ const CommentSection = ({ blog }) => {
           <div className="new-comment"></div>
           <form onSubmit={handleComment} className="comment-form">
           <input type="text" name="name" placeholder="Name" className="commenter-name item" autocomplete="name"/>
-            <textarea name="textarea" className="comment-text item" cols="80" rows="10" placeholder="Enter your comment..."></textarea>
+            <textarea name="comment" className="comment-text item" cols="80" rows="10" placeholder="Enter your comment..."></textarea>
 
             <button type="submit" className="button" disabled={loading}>{loading ? 'Posting' : 'Comment'}</button>
           </form>
@@ -210,7 +219,7 @@ const ReadBlog = () => {
         <div className="column">
           <RenderBlog />
         </div>
-            <CommentSection/>
+            <CommentSection />
 
         
       </div>
