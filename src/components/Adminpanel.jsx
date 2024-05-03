@@ -256,6 +256,7 @@ const FetchBlogs = () => {
   }, []);
 
   const handleEditBlog = async(blogId) => {
+    setLoading(true);
     try{
       const res = await fetch(`https://my-brand-api-x8z4.onrender.com/blogs/getBlog/${blogId}`);
     if (res.ok) {
@@ -272,6 +273,7 @@ const FetchBlogs = () => {
 };
 
   const handleDeleteBlog = async (blogId) => {
+    setLoading(true);
     try {
       const res = await fetch(
         `https://my-brand-api-x8z4.onrender.com/blogs/deleteBlog/${blogId}`,
@@ -289,16 +291,14 @@ const FetchBlogs = () => {
       }
     } catch (err) {
       setError(err.message);
+    } finally{
+      setLoading(false);
     }
   };
-
+ 
   return (
     <>
-      {loading && (
-        <div className="loader" style={{ display: "flex" }}>
-          {" "}
-        </div>
-      )}
+      {loading && <div className="loader" style={{ display: "flex" }}></div>}
       {error && <div className="error">{error}</div>}
       {editingBlog && <UpdateBlog blog={editingBlog}/>}
       {!editingBlog && (

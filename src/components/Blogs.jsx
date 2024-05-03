@@ -23,7 +23,7 @@ const BlogItem = ({ blog }) => {
           </div>
         </div>
         <button className="blog-button">
-          <a onClick={() => {navigate('/readblog')}}>Read Article</a>
+          <a onClick={() => {navigate(`/readblog?id=${blog._id}`)}}>Read Article</a>
         </button>
         
       </div>
