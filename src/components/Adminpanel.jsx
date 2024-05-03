@@ -7,6 +7,7 @@ const PostBlogs = () => {
   const [blogs, setBlogs] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  
 
   const handleBlogs = async (e) => {
     e.preventDefault();
@@ -147,13 +148,15 @@ const FetchQueries = () => {
   const [queries, setQueries] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [popup, setPopup] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
     const fetchQueries = async () => {
       setLoading(true);
       try {
         const res = await fetch(
-          `https://my-brand-api-x8z4.onrender.com/blogs/getAllBlogs`
+          `https://my-brand-api-x8z4.onrender.com/queries/getquery`
         );
         if (!res.ok) {
           throw new Error(`HTTP status: ${res.status}`);
@@ -170,6 +173,16 @@ const FetchQueries = () => {
     };
     fetchQueries();
   }, []);
+
+  const handleViewMore = (query) => {
+    setPopup(query);
+    setShowPopup(true);
+  }
+
+  const handleClosePopup = () => {
+    setShowPopup(false);
+    setPopup(null);
+  }
 
   return (
     <>
@@ -188,10 +201,23 @@ const FetchQueries = () => {
               <h3>{query.name}</h3>
               <h4>{query.email}</h4>
             </div>
-            <p>{query.query}</p>
-            <button className="button">View More</button>
+            
+            <button className="button" onClick={() => {handleViewMore(query)}}>View More</button>
           </div>
         ))
+      )}
+      {showPopup && (
+        <div className="popup">
+          <div className="popup-content">
+            <span className="close" onClick={handleClosePopup}>&times;</span>
+            <div className="user">
+              <h3>{popup.name}</h3>
+              <h4>{popup.email}</h4>
+            </div>
+            <p>{popup.query}</p>
+          </div>
+
+        </div>
       )}
     </>
   );
