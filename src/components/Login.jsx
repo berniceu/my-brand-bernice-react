@@ -18,6 +18,11 @@ const LoginPost = () => {
             password: form.password.value
 
         }
+
+        if(!formData.email || !formData.password){
+            setError('Please enter email and password');
+            return;
+        }
         try{
             const res = await fetch('https://my-brand-api-x8z4.onrender.com/users/login', {
                 method: 'POST',
@@ -40,7 +45,7 @@ const LoginPost = () => {
             }
 
         } catch(err){
-            setError(err);
+            setError(err.message);
             
         } finally{
             setLoading(false);
@@ -49,14 +54,15 @@ const LoginPost = () => {
     }
 
     return(<>
+    {error && <div>{error}</div>}
     <form onSubmit={handleLogin} id="login-form">
             <div className="input-field">
-                <input type="email" placeholder="Email Address" className="item" id="email" autocomplete="email"/>
+                <input type="email" placeholder="Email Address" name="email" className="item" id="email" autocomplete="email"/>
                 <div className="error-text">Email Address can't be blank</div>
             </div>
             
             <div className="input-field">
-                <input type="password" placeholder="Password" className="item" id="login-password" autocomplete="current-password"/>
+                <input type="password" placeholder="Password" className="item" id="login-password" name="password" autocomplete="current-password"/>
                 <div className="error-text">Password can't be blank</div>
             </div>
 
@@ -76,7 +82,7 @@ const Login = () => {
     <div className="login">
     <div className="header">
         <header>
-            <a href="index.html"><h1>BERNICE</h1></a>
+            <a onClick={() => navigate(-1)}><h1>BERNICE</h1></a>
             <button className="toggle"><img src={moon} alt="dark mode icon" className="moon"/></button>
         </header>
     </div>

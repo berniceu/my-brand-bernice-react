@@ -572,13 +572,10 @@ footer p{
 }
 
 .login{
-    body{
-        font-family: 'Poppins', sans-serif;
-        font-weight: 400;
-        text-align: center;
-    
-    
-    }
+  text-align: center;
+  background-color: #E5989B;
+  height: 100vh;
+  
     
     .dark-mode{
         background-color: black;
@@ -626,11 +623,11 @@ footer p{
         justify-content: center;
         align-items: center;
         gap: 2rem;
-        margin-top: 5rem;
+        
         background-color: #fff;
         width: 400px;
         height: 500px;
-        margin: 2vw auto;
+        margin: 5rem auto;
         border-radius: 10px;
     
         
@@ -702,6 +699,9 @@ footer p{
 }
 
 .signup{
+  text-align: center;
+  background-color: #E5989B;
+  height: 100vh;
     header{
         display: flex;
         justify-content: space-between;
