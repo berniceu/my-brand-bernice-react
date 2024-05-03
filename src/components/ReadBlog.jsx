@@ -104,16 +104,14 @@ const CommentSection = ({ blog }) => {
     e.preventDefault();
 
     const form = e.target;
-
-
-    const commentData = {
-      name: form.value,
-      comment: form.value
-    }
+    const name = form.elements["name"].value.trim();
+    const commentText = form.elements["comment"].value.trim();
 
     
 
-    if(!commentData.name || !commentData.comment){
+    
+
+    if(!name || !commentText){
       setError('Both name and comment are required');
       return;
 
@@ -125,7 +123,7 @@ const CommentSection = ({ blog }) => {
       const res = await fetch(`https://my-brand-api-x8z4.onrender.com/blogs/addComment/${blogId}`,{
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(commentData)
+        body: JSON.stringify({name, comment: commentText})
       });
 
       if(res.ok){
@@ -133,6 +131,7 @@ const CommentSection = ({ blog }) => {
         alert('Comment posted successfully');
         const newComment = await res.json();
         setComments([...comments, newComment]);
+        window.location.reload();
 
       } else{
         setError('Failed to post comment');
