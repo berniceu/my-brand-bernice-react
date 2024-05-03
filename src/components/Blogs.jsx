@@ -80,9 +80,7 @@ const Blogs = () => {
       <main>
         <div className="welcome">
           <h1>Welcome To My Blog</h1>
-          <button className="toggle">
-
-          </button>
+          
         </div>
 
         <div className="blogs-container">
