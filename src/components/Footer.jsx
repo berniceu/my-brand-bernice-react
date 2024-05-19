@@ -10,7 +10,7 @@ const Subscribe = () => {
   const handleSubscribe = async (e) => {
     e.preventDefault();
     let subEmail = e.target.elements.subscribeEmail.value;
-    if (subEmail== "") {
+    if (subEmail === "") {
       alert("Please fill out your email");
       return;
     } else if (!emailValid.test(subEmail)) {

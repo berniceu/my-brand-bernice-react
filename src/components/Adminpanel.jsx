@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
-
 import profile from "../images/profile.png";
 import { Link } from "react-router-dom";
 
 const PostBlogs = () => {
-  const [blogs, setBlogs] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   
@@ -66,7 +64,11 @@ const PostBlogs = () => {
   );
 };
 
-const UpdateBlog = ({blog}) => {
+const UpdateBlog = ({ blog }) => {
+  const [blogTitle, setBlogTitle] = useState(blog.blogTitle);
+  const [blogContent, setBlogContent] = useState(blog.blog);
+  const [author, setAuthor] = useState(blog.author);
+  const [blogImage, setBlogImage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -74,27 +76,32 @@ const UpdateBlog = ({blog}) => {
     e.preventDefault();
     setLoading(true);
 
-    const formData = new FormData();
-    const form = e.target;
-    formData.append("blogTitle", form.title.value);
-    formData.append("blog", form.story.value);
-    formData.append("author", form.author.value);
-    formData.append("blogImage", form.image.files[0]);
+    const updatedBlog = {
+      _id: blog._id,
+      blogTitle,
+      blog: blogContent,
+      author,
+      blogImage: blogImage || blog.blogImage
+    }
+    
+    
     
     try {
-      const res = await fetch(
-        `https://my-brand-api-x8z4.onrender.com/blogs/updateBlog/${blog._id}`,
-        {
-          method: "PUT",
-          body: formData,
-        }
-      );
+      const res = await fetch(`https://my-brand-api-x8z4.onrender.com/blogs/updateBlog/${updatedBlog._id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedBlog)
+      });
 
-      if (res.ok) {
-        alert("Blog updated successfully");
+      if(res.ok){
+        alert('Blog updated successfully');
+        window.location.reload()
       } else {
-        alert("Failed to update blog");
+        setError('Failed to update blog');
       }
+
     } catch (err) {
       setError(err.message);
     } finally {
@@ -110,6 +117,7 @@ const UpdateBlog = ({blog}) => {
           name="image"
           id="blog-image"
           accept="image/*"
+          onChange={(e) => setBlogImage(e.target.files[0])}
           
         />
         <br />
@@ -119,7 +127,8 @@ const UpdateBlog = ({blog}) => {
           name="title"
           id="title"
           placeholder="Title"
-          defaultValue={blog.blogTitle}
+          value={blogTitle}
+          onChange={(e) => setBlogTitle(e.target.value)}
         />
         <br />
         <input
@@ -127,14 +136,16 @@ const UpdateBlog = ({blog}) => {
           name="author"
           id="author"
           placeholder="Author"
-          defaultValue={blog.author}
+          value={author}
+          onChange={(e) => setAuthor(e.target.value)}
         />
         <textarea
           name="story"
           id="story"
           rows="10"
           placeholder="Tell Your Story..."
-          defaultValue={blog.blog}
+          value={blogContent}
+          onChange={(e) => setBlogContent(e.target.value)}
         ></textarea>
         <button className="button" id="publish">
           {loading ? "Updating..." : "Update"}
@@ -240,7 +251,7 @@ const FetchBlogs = () => {
           throw new Error(`HTTP Error: ${res.status}`);
         }
 
-        let blogsData = await res.json();
+        const blogsData = await res.json();
 
         setBlogs(blogsData);
         setError(null);
@@ -272,6 +283,8 @@ const FetchBlogs = () => {
   }
 };
 
+ 
+
   const handleDeleteBlog = async (blogId) => {
     setLoading(true);
     try {
@@ -284,7 +297,6 @@ const FetchBlogs = () => {
         setBlogs((prevBlogs) =>
           prevBlogs.filter((blog) => blog._id !== blogId)
         );
-        window.location.reload();
         alert("deleted successfully");
       } else {
         alert("delete failed");

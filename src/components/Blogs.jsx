@@ -9,7 +9,7 @@ const BlogItem = ({ blog }) => {
     <>
       <div className="article" data-set={blog._id}>
         <div className="img-container">
-          <img src={blog.blogImage} alt="blog image" />
+          <img src={blog.blogImage} alt="blog " />
         </div>
         <div className="article-title">
           <h6>{blog.blogTitle}</h6>

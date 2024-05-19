@@ -1376,6 +1376,18 @@ footer p{
     .button a{
         color: #E5989B;
     }
+
+    .new-story-form{
+      flex-direction: column;
+
+      textarea{
+        font-family: 'Poppins', sans-serif;
+        height: 20vh;
+        width: 500px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+      }
+    }
     
     /*popup */
     

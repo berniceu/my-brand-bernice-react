@@ -6,7 +6,7 @@ import urlShortener from '../images/urlshortener.jpg';
 import weather from '../images/weather.png';
 import Navbar from "./Navbar";
 import Footer from "./Footer";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -123,7 +123,7 @@ const Home = () => {
               </p>
 
               <button className="button" onClick = {() => navigate('/blogs')}>
-                <a>Read My Blogs</a>
+                <a href="#">Read My Blogs</a>
               </button>
               <div className="social-icons">
                 <a
